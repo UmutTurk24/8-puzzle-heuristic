@@ -38,25 +38,22 @@ class Puzzle8:
     def move_up(self, cur_tile):
         if self.board[cur_tile-3] < 0:
             if self.board[cur_tile-3] == " ":
-                swap_tiles(cur_tile-3, cur_tile)
+                self.swap_tiles(cur_tile-3, cur_tile)
 
-    def move_down(cur_tile):
+    def move_down(self, cur_tile):
         if self.board[cur_tile+3] > 9:
             if self.board[cur_tile+3] == " ":
-                swap_tiles(cur_tile+3, cur_tile)
+                self.swap_tiles(cur_tile+3, cur_tile)
 
-    def move_right(cur_tile):
+    def move_right(self, cur_tile):
         if self.board[cur_tile+1] > 9:
             if self.board[cur_tile+1] == " ":
-                swap_tiles(cur_tile+1, cur_tile)
+                self.swap_tiles(cur_tile+1, cur_tile)
 
-    def move_right(cur_tile):
+    def move_right(self, cur_tile):
         if self.board[cur_tile-1] < 0:
             if self.board[cur_tile-1] == " ":
-                swap_tiles(cur_tile-1, cur_tile)
-
-
-
+                self.swap_tiles(cur_tile-1, cur_tile)
 
 
 myPuzzle = Puzzle8()
