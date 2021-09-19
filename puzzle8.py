@@ -22,8 +22,38 @@ Find the
 
  """
 import random
+import math
 
 class PriorityQueue(object):
+    def __init__(self):
+        self.queue = []
+
+    def __str__(self):
+        return ' '.join([str(i) for i in self.queue])
+
+    # for checking if the queue is empty
+    def isEmpty(self):
+        return len(self.queue) == 0
+
+    # for inserting an element in the queue
+    def insert(self, data):
+        self.queue.append(data)
+
+    # for popping an element based on Priority
+    def delete(self):
+        try:
+            max = 0
+            for i in range(len(self.queue)):
+                if self.queue[i] > self.queue[max]:
+                    max = i
+            item = self.queue[max]
+            del self.queue[max]
+            return item
+        except IndexError:
+            print()
+            exit()
+
+class PriorityQueue2(object):
     def __init__(self):
         self.queue = []
 
@@ -114,22 +144,14 @@ class Puzzle8:
                 count = count + 1
         return count
 
-    def calculate_x_coor(index):
+
+    def calculate_x_coor(self, index):
         x_cor = index%3
         return x_cor
 
-    def calculate_y_coor(index):
-        y_cor = index/3
+    def calculate_y_coor(self, index):
+        y_cor = math.floor(index/3)
         return y_cor
-
-    def calculate_difference(self, goal_index, cur_index):
-        goal_x = self.calculate_x_coor(goal_index)
-        goal_y = self.calculate_y_coor(goal_index)
-        cur_x = self.calculate_x_coor(cur_index)
-        cur_y = self.calculate_y_coor(cur_index)
-        dif_x = abs(goal_x - cur_x)
-        dif_y = abs(cur_x - cur_y)
-        return dif_x + dif_y
 
     def check_validity(self):
         valid_counter = 0
@@ -156,14 +178,26 @@ class Puzzle8:
 
         return graph_list
 
-    # def calculate_manhattan_heuristic(self):
+    def calculate_difference(self, goal_index, cur_index):
+        goal_x = self.calculate_x_coor(goal_index)
+        goal_y = self.calculate_y_coor(goal_index)
+        cur_x = self.calculate_x_coor(cur_index)
+        cur_y = self.calculate_y_coor(cur_index)
+        dif_x = abs(goal_x - cur_x)
+        dif_y = abs(goal_y - cur_y)
+        return dif_x + dif_y
 
+    def calculate_manhattan_heuristic(self):
+        diff = 0
+        for x in range(len(self.board)):
+            if self.board[x] == -1:
+                continue
+            if x != self.board[x]:
+                ind_val = self.board[x]
+                diff = diff + self.calculate_difference(ind_val, x)
+        return diff
 
 myPuzzle = Puzzle8()
 graphs = myPuzzle.shuffle()
-# print(graphs)
-valids = myPuzzle.calculate_misplaced_heuristic()
-# print(valids)
-
-
-
+valids = myPuzzle.calculate_manhattan_heuristic()
+print(graphs)
