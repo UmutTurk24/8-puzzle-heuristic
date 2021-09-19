@@ -59,6 +59,7 @@ class Puzzle8:
 
     def shuffle(self):
         random.shuffle(self.board)
+        return self.board
 
     def swap_tiles(self, target_tile, cur_tile):
         temp = self.board[target_tile]
@@ -105,12 +106,12 @@ class Puzzle8:
             count += 1
 
     def calculate_misplaced_heuristic(self):
-        count=0
+        count = 0
         for x in range(len(self.board)):
             if self.board[x] == -1:
                 continue
             if self.board[x] != x:
-                count =+ 1
+                count = count + 1
         return count
 
     def calculate_x_coor(index):
@@ -136,14 +137,11 @@ class Puzzle8:
             if self.board[x] == -1:
                 continue
             for y in range(0,x):
-                # print(y)
                 if self.board[y] == -1:
                     continue
                 if self.board[y] < self.board[x]:
                     valid_counter += 1
         if valid_counter % 2 == 0:
-            # print("printing true")
-            # print(valid_counter)
             return True
         else:
             return False
@@ -162,8 +160,10 @@ class Puzzle8:
 
 
 myPuzzle = Puzzle8()
-graphs = myPuzzle.create_graphs(5)
-print(graphs)
+graphs = myPuzzle.shuffle()
+# print(graphs)
+valids = myPuzzle.calculate_misplaced_heuristic()
+# print(valids)
 
 
 
