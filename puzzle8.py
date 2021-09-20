@@ -218,23 +218,32 @@ counter = 0
 ind_zero = myPuzzle.board.index(-1)
 man_heur = myPuzzle.calculate_manhattan_heuristic()
 heapq.heappush(queue_manh,tuple((man_heur, myPuzzle.board)))
+searched_graphs = []
 
 while len(queue_manh):
+    heapq.heapify(queue_manh)
     pop_val = heapq.heappop(queue_manh)
+
+    for item in searched_graphs:
+        if item == pop_val[1]:
+            continue
+
+    searched_graphs.append(pop_val[1])
+
+    print(pop_val)
+
 
     if pop_val[1] == [-1,1,2,3,4,5,6,7,8]:
         print("Found a solution")
         print(counter)
         break
 
-    print(pop_val)
     myPuzzleUp.board = pop_val[1]
     myPuzzleDown.board = pop_val[1]
     myPuzzleRight.board = pop_val[1]
     myPuzzleLeft.board = pop_val[1]
 
     ind_zero = myPuzzle.board.index(-1)
-
     if(myPuzzleDown.move_down(ind_zero)):
         manhattan_heur = myPuzzleDown.calculate_manhattan_heuristic()
         heapq.heappush(queue_manh,tuple((manhattan_heur, myPuzzleDown.board)))
