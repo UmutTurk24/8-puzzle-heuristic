@@ -18,74 +18,20 @@ Find the
     function, ifgoalstate(THEgoalstate): compare the input array with the current state
     function, printboard: print the board as a 3x3 table
 
-
+heapqueue, tuple. f values and board
 
  """
 import random
 import math
-
-class PriorityQueue(object):
-    def __init__(self):
-        self.queue = []
-
-    def __str__(self):
-        return ' '.join([str(i) for i in self.queue])
-
-    # for checking if the queue is empty
-    def isEmpty(self):
-        return len(self.queue) == 0
-
-    # for inserting an element in the queue
-    def insert(self, data):
-        self.queue.append(data)
-
-    # for popping an element based on Priority
-    def delete(self):
-        try:
-            max = 0
-            for i in range(len(self.queue)):
-                if self.queue[i] > self.queue[max]:
-                    max = i
-            item = self.queue[max]
-            del self.queue[max]
-            return item
-        except IndexError:
-            print()
-            exit()
-
-class PriorityQueue2(object):
-    def __init__(self):
-        self.queue = []
-
-    def __str__(self):
-        return ' '.join([str(i) for i in self.queue])
-
-    # for checking if the queue is empty
-    def isEmpty(self):
-        return len(self.queue) == 0
-
-    # for inserting an element in the queue
-    def insert(self, data):
-        self.queue.append(data)
-
-    # for popping an element based on Priority
-    def delete(self):
-        try:
-            max = 0
-            for i in range(len(self.queue)):
-                if self.queue[i] > self.queue[max]:
-                    max = i
-            item = self.queue[max]
-            del self.queue[max]
-            return item
-        except IndexError:
-            print()
-            exit()
+import heapq
 
 class Puzzle8:
 
     def __init__(self):
         self.board = board = [-1,1,2,3,4,5,6,7,8]
+        self.queue_manh = queue_manh = []
+        self.queue_misp = queue_misp = []
+
 
     def shuffle(self):
         random.shuffle(self.board)
@@ -98,25 +44,31 @@ class Puzzle8:
 
     def move_up(self, cur_tile):
         if cur_tile-3 >= 0:
-            if self.board[cur_tile-3] == -1:
-                self.swap_tiles(cur_tile-3, cur_tile)
+            self.swap_tiles(cur_tile-3, cur_tile)
+            return True
+        else:
+            return False
 
     def move_down(self, cur_tile):
-        if cur_tile+3 <= 9:
-            if self.board[cur_tile+3] == -1:
-                self.swap_tiles(cur_tile+3, cur_tile)
+        if cur_tile+3 <= 8:
+            self.swap_tiles(cur_tile+3, cur_tile)
+            return True
+        else:
+            return False
 
     def move_right(self, cur_tile):
-        if cur_tile+1 <= 9:
-            if self.board[cur_tile+1] == -1:
-                self.swap_tiles(cur_tile+1, cur_tile)
+        if cur_tile+1 <= 8:
+            self.swap_tiles(cur_tile+1, cur_tile)
+            return True
+        else:
+            return False
 
     def move_left(self, cur_tile):
         if cur_tile-1 >= 0:
-            print("here1")
-            if self.board[cur_tile-1] == -1:
-                print("here2")
-                self.swap_tiles(cur_tile-1, cur_tile)
+            self.swap_tiles(cur_tile-1, cur_tile)
+            return True
+        else:
+            return False
 
     def goal_state(self):
         if self.board == [-1,1,2,3,4,5,6,7,8]:
@@ -143,7 +95,6 @@ class Puzzle8:
             if self.board[x] != x:
                 count = count + 1
         return count
-
 
     def calculate_x_coor(self, index):
         x_cor = index%3
@@ -197,7 +148,111 @@ class Puzzle8:
                 diff = diff + self.calculate_difference(ind_val, x)
         return diff
 
+    def update_board(self, new_board):
+        self.board = new_board.copy()
+
+    # def move_around_manh(self):
+    #     ind_zero = self.board.index(-1)
+    #     self.cur_board1 = self.board.copy()
+    #     self.cur_board2 = self.board.copy()
+    #     self.cur_board3 = self.board.copy()
+    #     self.cur_board4 = self.board.copy()
+    #     print(self.cur_board1)
+    #     if (self.move_up(self.cur_board1[ind_zero])):
+    #         manhattan_heur = self.calculate_manhattan_heuristic()
+    #         self.queue_manh.append(tuple((manhattan_heur, self.cur_board1)))
+    #     if (self.move_right(self.cur_board2[ind_zero])):
+    #         manhattan_heur = self.calculate_manhattan_heuristic()
+    #         self.queue_manh.append(tuple((manhattan_heur, self.cur_board2)))
+    #     if (self.move_left(self.cur_board3[ind_zero])):
+    #         manhattan_heur = self.calculate_manhattan_heuristic()
+    #         self.queue_manh.append(tuple((manhattan_heur, self.cur_board3)))
+    #     if (self.move_down(self.cur_board4[ind_zero])):
+    #         manhattan_heur = self.calculate_manhattan_heuristic()
+    #         self.queue_manh.append(tuple((manhattan_heur, self.cur_board4)))
+    #     return heapq.heapify(self.queue_manh)
+
+    # def move_around_misp(self):
+    #     ind_zero = self.board.index(-1)
+
+    #     cur_board1, cur_board2, cur_board3, cur_board4 = self.board.copy()
+    #     if (self.move_up(cur_board1[ind_zero])):
+    #         misplaced_heur = self.calculate_misplaced_heuristic()
+    #         self.queue_misp.append(tuple((misplaced_heur, cur_board1)))
+    #     if (self.move_up(cur_board2[ind_zero])):
+    #         misplaced_heur = self.calculate_misplaced_heuristic()
+    #         self.queue_misp.append(tuple((misplaced_heur, cur_board2)))
+    #     if (self.move_up(cur_board3[ind_zero])):
+    #         misplaced_heur = self.calculate_misplaced_heuristic()
+    #         self.queue_misp.append(tuple((misplaced_heur, cur_board3)))
+    #     if (self.move_up(cur_board4[ind_zero])):
+    #         misplaced_heur = self.calculate_misplaced_heuristic()
+    #         self.queue_misp.append(tuple((misplaced_heur, cur_board4)))
+    #     return heapq.heapify(self.queue_misp)
+
+
+
+
+
+"""
+For each possible move the blank space can do in 8puzzle:
+    create a heuristic for each possibility
+    store them in a pri queue - how to keep track of which one is which?
+    do we have to create a node-graph? or is enqueuing enough?
+ """
+
 myPuzzle = Puzzle8()
-graphs = myPuzzle.shuffle()
-valids = myPuzzle.calculate_manhattan_heuristic()
-print(graphs)
+
+myPuzzleUp = Puzzle8()
+myPuzzleDown = Puzzle8()
+myPuzzleRight = Puzzle8()
+myPuzzleLeft = Puzzle8()
+queue_manh = []
+# myPuzzleUp.board = myPuzzle.board.copy()
+# myPuzzleDown.board = myPuzzle.board.copy()
+# myPuzzleRight.board = myPuzzle.board.copy()
+# myPuzzleLeft.board = myPuzzle.board.copy()
+
+myPuzzle.shuffle()
+counter = 0
+ind_zero = myPuzzle.board.index(-1)
+man_heur = myPuzzle.calculate_manhattan_heuristic()
+heapq.heappush(queue_manh,tuple((man_heur, myPuzzle.board)))
+
+while len(queue_manh):
+    pop_val = heapq.heappop(queue_manh)
+
+    if pop_val[1] == [-1,1,2,3,4,5,6,7,8]:
+        print("Found a solution")
+        print(counter)
+        break
+
+    print(pop_val)
+    myPuzzleUp.board = pop_val[1]
+    myPuzzleDown.board = pop_val[1]
+    myPuzzleRight.board = pop_val[1]
+    myPuzzleLeft.board = pop_val[1]
+
+    ind_zero = myPuzzle.board.index(-1)
+
+    if(myPuzzleDown.move_down(ind_zero)):
+        manhattan_heur = myPuzzleDown.calculate_manhattan_heuristic()
+        heapq.heappush(queue_manh,tuple((manhattan_heur, myPuzzleDown.board)))
+
+    if(myPuzzleUp.move_up(ind_zero)):
+        manhattan_heur = myPuzzleUp.calculate_manhattan_heuristic()
+        heapq.heappush(queue_manh,tuple((manhattan_heur, myPuzzleUp.board)))
+
+    if(myPuzzleUp.move_right(ind_zero)):
+        manhattan_heur = myPuzzleRight.calculate_manhattan_heuristic()
+        heapq.heappush(queue_manh,tuple((manhattan_heur, myPuzzleRight.board)))
+
+    if(myPuzzleUp.move_left(ind_zero)):
+        manhattan_heur = myPuzzleLeft.calculate_manhattan_heuristic()
+        heapq.heappush(queue_manh,tuple((manhattan_heur, myPuzzleLeft.board)))
+
+    counter =+ 1
+
+
+
+
