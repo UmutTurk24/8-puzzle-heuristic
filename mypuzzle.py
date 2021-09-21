@@ -160,6 +160,7 @@ class Puzzle8:
                 move_num = move_num -1
                 self.move_up(empt)
 
+
     def update_board(self, new_board):
         self.board = new_board.copy()
 
@@ -180,72 +181,95 @@ myPuzzleUp = Puzzle8()
 myPuzzleDown = Puzzle8()
 myPuzzleRight = Puzzle8()
 myPuzzleLeft = Puzzle8()
-queue_manh = []
+
 
 # myPuzzle.shuffle()
 # mygraph = myPuzzle.random_moves(10)
-# myPuzzle.random_moves(10)
 
-# mygraph = [1,4,2,3,7,5,6,8,-1]
+# mygraph = [1,4,2,3,7,5,6,-1,8]
 # mygraph = [1,-1,2,3,4,5,6,7,8]
-# myPuzzle.board = [1,4,2,3,7,5,6,8,-1]
-# myPuzzle.board = [1,-1,4,3,7,2,6,8,5]
-# myPuzzle.board = [3,1,4,7,-1,2,6,8,5]
-# myPuzzle.board = [3,1,4,7,2,-1,6,8,5] # 11 sol
-# myPuzzle.board = [3,1,4,7,2,5,6,8,-1]
-# myPuzzle.board = [3,1,4,7,2,5,-1,6,8]
-# myPuzzle.board = [3,1,4,7,2,5,-1,6,8]
+# myPuzzle.board = mygraph[0].copy()
 # print(mygraph)
-counter = 0
-ind_zero = myPuzzle.board.index(-1)
-man_heur = myPuzzle.calculate_manhattan_heuristic()
-heapq.heappush(queue_manh,tuple((man_heur, myPuzzle.board,0)))
-searched_graphs = []
 
-while len(queue_manh):
-    heapq.heapify(queue_manh)
-    pop_val = heapq.heappop(queue_manh)
-
-    if pop_val[1] == [-1,1,2,3,4,5,6,7,8]:
-        print(counter, "solution length")
-        print(counter)
-        break
-
-    for x in searched_graphs:
-        if x == pop_val[1]:
-            continue
-
-    searched_graphs.append(pop_val[1])
-    myPuzzleUp.board = pop_val[1].copy()
-    myPuzzleDown.board = pop_val[1].copy()
-    myPuzzleRight.board = pop_val[1].copy()
-    myPuzzleLeft.board = pop_val[1].copy()
-
-    ind_zero = myPuzzleUp.board.index(-1)
-    print(pop_val, ",manh heur")
-    counter += 1
-    pcost = pop_val[2]
-    if(myPuzzleDown.move_down(ind_zero)):
-        print(myPuzzleDown.board,"puzzle_down")
-        manhattan_heur1 = myPuzzleDown.calculate_manhattan_heuristic()
-        heapq.heappush(queue_manh, tuple((manhattan_heur1+pcost, myPuzzleDown.board, pcost+1)))
-
-    if(myPuzzleUp.move_up(ind_zero)):
-        print(myPuzzleUp.board,"puzzle_up")
-        manhattan_heur2 = myPuzzleUp.calculate_manhattan_heuristic()
-        heapq.heappush(queue_manh, tuple((manhattan_heur2+pcost, myPuzzleUp.board, pcost+1)))
-
-    if(myPuzzleRight.move_right(ind_zero)):
-        print(myPuzzleRight.board,"puzzle_right")
-        manhattan_heur3 = myPuzzleRight.calculate_manhattan_heuristic()
-        heapq.heappush(queue_manh, tuple((manhattan_heur3+pcost, myPuzzleRight.board, pcost+1)))
-
-    if(myPuzzleLeft.move_left(ind_zero)):
-        print(myPuzzleLeft.board,"puzzle_left")
-        manhattan_heur4 = myPuzzleLeft.calculate_manhattan_heuristic()
-        heapq.heappush(queue_manh, tuple((manhattan_heur4+pcost, myPuzzleLeft.board, pcost+1)))
+# searched_graphs = []
 
 
+for x in range(1):
+    myPuzzle.random_moves(5)
+    queue_manh = []
+    counter = 0
+    ind_zero = myPuzzle.board.index(-1)
+    man_heur = myPuzzle.calculate_manhattan_heuristic()
+    heapq.heappush(queue_manh,tuple((man_heur, myPuzzle.board)))
+    nodes_searched = 0
+    two_graph = 0
+    four_graph = 0
+    six_graph = 0
 
-# print(searched_graphs, "searched graphs")
+    while len(queue_manh):
+        heapq.heapify(queue_manh)
+        pop_val = heapq.heappop(queue_manh)
 
+        if pop_val[1] == [-1,1,2,3,4,5,6,7,8]:
+#             print("Found a solution")
+#             print(counter)
+            break
+
+#         for x in searched_graphs:
+#             if x == pop_val[1]:
+#                 continue
+
+        # searched_graphs.append(pop_val[1])
+        myPuzzleUp.board = pop_val[1].copy()
+        myPuzzleDown.board = pop_val[1].copy()
+        myPuzzleRight.board = pop_val[1].copy()
+        myPuzzleLeft.board = pop_val[1].copy()
+
+        ind_zero = myPuzzleUp.board.index(-1)
+#         print(pop_val, ",manh heur")
+        counter += 1
+
+        if(myPuzzleDown.move_down(ind_zero)):
+            nodes_searched += 1
+#             print(myPuzzleDown.board,"puzzle_down")
+            manhattan_heur1 = myPuzzleDown.calculate_manhattan_heuristic()
+            heapq.heappush(queue_manh,tuple((manhattan_heur1+1, myPuzzleDown.board)))
+
+        if(myPuzzleUp.move_up(ind_zero)):
+            nodes_searched += 1
+#             print(myPuzzleUp.board,"puzzle_up")
+            manhattan_heur2 = myPuzzleUp.calculate_manhattan_heuristic()
+            heapq.heappush(queue_manh, tuple((manhattan_heur2+1, myPuzzleUp.board)))
+
+        if(myPuzzleRight.move_right(ind_zero)):
+            nodes_searched += 1
+#             print(myPuzzleRight.board,"puzzle_right")
+            manhattan_heur3 = myPuzzleRight.calculate_manhattan_heuristic()
+            heapq.heappush(queue_manh, tuple((manhattan_heur3+1, myPuzzleRight.board)))
+
+        if(myPuzzleLeft.move_left(ind_zero)):
+            nodes_searched += 1
+#             print(myPuzzleLeft.board,"puzzle_left")
+            manhattan_heur4 = myPuzzleLeft.calculate_manhattan_heuristic()
+            heapq.heappush(queue_manh, tuple((manhattan_heur4+1, myPuzzleLeft.board)))
+
+    if counter == 2:
+        two_graph += 1
+#         print(counter)
+        print(nodes_searched, "nodes searched ", x, " times")
+#         print(searched_graphs, "searched graphs")
+
+#     if counter == 4:
+#         four_graph += 1
+# #         print(counter)
+#         print(nodes_searched, "nodes searched ", x, " times")
+# #         print(searched_graphs, "searched graphs")
+
+#     if counter == 6:
+#         six_graph += 1
+# #         print(counter)
+#         print(nodes_searched, "nodes searched ", x, " times")
+# #         print(searched_graphs, "searched graphs")
+
+
+print(nodes_searched/two_graph, "in average and: ", two_graph, " in total")
