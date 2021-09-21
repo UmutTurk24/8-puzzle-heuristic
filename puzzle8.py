@@ -121,12 +121,10 @@ class Puzzle8:
 
     def create_graphs(self, repeat):
         graph_list = []
-
         while len(graph_list) < repeat:
             self.shuffle()
             if self.check_validity() == True:
                 graph_list.append(self.board[:])
-
         return graph_list
 
     def calculate_difference(self, goal_index, cur_index):
@@ -214,6 +212,11 @@ queue_manh = []
 # myPuzzleLeft.board = myPuzzle.board.copy()
 
 myPuzzle.shuffle()
+print("I am here")
+mygraph = myPuzzle.create_graphs(1)
+print(mygraph)
+myPuzzle.board = mygraph[0]
+print(myPuzzle.board)
 counter = 0
 ind_zero = myPuzzle.board.index(-1)
 man_heur = myPuzzle.calculate_manhattan_heuristic()
@@ -231,7 +234,6 @@ while len(queue_manh):
     searched_graphs.append(pop_val[1])
 
     print(pop_val)
-
 
     if pop_val[1] == [-1,1,2,3,4,5,6,7,8]:
         print("Found a solution")
