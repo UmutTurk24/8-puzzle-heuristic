@@ -189,18 +189,25 @@ gsix = []
 geight =[]
 gten=[]
 gtwelve=[]
+gfourteen=[]
+gsixteen=[]
+geighteen=[]
+gtwenty=[]
+gtwentytwo=[]
+gtwentyfour=[]
 
-for x in range(10000):
+for x in range(1000):
     queue_manh = []
+    pcost = 0
     nodes_searched = 0
     graphs_generated = 0
     myPuzzle.board =[-1,1,2,3,4,5,6,7,8]
-    myPuzzle.random_moves(16)
+    myPuzzle.random_moves(20)
     ind_zero = myPuzzle.board.index(-1)
-    man_heur = myPuzzle.calculate_manhattan_heuristic()
+    man_heur = myPuzzle.calculate_misplaced_heuristic()
     heapq.heappush(queue_manh,tuple((man_heur, myPuzzle.board,0)))
     searched_graphs = []
-
+    length_queue = 0
     while len(queue_manh):
         heapq.heapify(queue_manh)
         pop_val = heapq.heappop(queue_manh)
@@ -222,46 +229,65 @@ for x in range(10000):
         if(myPuzzleDown.move_down(ind_zero)):
             graphs_generated += 1
             # print(myPuzzleDown.board,"puzzle_down")
-            manhattan_heur1 = myPuzzleDown.calculate_manhattan_heuristic()
+            manhattan_heur1 = myPuzzleDown.calculate_misplaced_heuristic()
             heapq.heappush(queue_manh, tuple((manhattan_heur1+pcost, myPuzzleDown.board, pcost+1)))
 
         if(myPuzzleUp.move_up(ind_zero)):
             graphs_generated += 1
             # print(myPuzzleUp.board,"puzzle_up")
-            manhattan_heur2 = myPuzzleUp.calculate_manhattan_heuristic()
+            manhattan_heur2 = myPuzzleUp.calculate_misplaced_heuristic()
             heapq.heappush(queue_manh, tuple((manhattan_heur2+pcost, myPuzzleUp.board, pcost+1)))
 
         if(myPuzzleRight.move_right(ind_zero)):
             graphs_generated += 1
             # print(myPuzzleRight.board,"puzzle_right")
-            manhattan_heur3 = myPuzzleRight.calculate_manhattan_heuristic()
+            manhattan_heur3 = myPuzzleRight.calculate_misplaced_heuristic()
             heapq.heappush(queue_manh, tuple((manhattan_heur3+pcost, myPuzzleRight.board, pcost+1)))
 
         if(myPuzzleLeft.move_left(ind_zero)):
             graphs_generated += 1
             # print(myPuzzleLeft.board,"puzzle_left")
-            manhattan_heur4 = myPuzzleLeft.calculate_manhattan_heuristic()
+            manhattan_heur4 = myPuzzleLeft.calculate_misplaced_heuristic()
             heapq.heappush(queue_manh, tuple((manhattan_heur4+pcost, myPuzzleLeft.board, pcost+1)))
+    length_queue = len(queue_manh)
+    print(pcost,"solution length")
+    print(nodes_searched, "nodes searched")
 
-
-
-    if nodes_searched == 20:
+    if pcost == 2:
         gtwo.append(graphs_generated)
 
-    if nodes_searched == 22:
+    if pcost == 4:
         gfour.append(graphs_generated)
 
-    if nodes_searched == 24:
+    if pcost == 6:
         gsix.append(graphs_generated)
 
-    if nodes_searched == 12:
+    if pcost == 8:
         geight.append(graphs_generated)
 
-    if nodes_searched == 16:
+    if pcost == 10:
         gten.append(graphs_generated)
 
-    if nodes_searched == 18:
+    if pcost == 12:
         gtwelve.append(graphs_generated)
+
+    if pcost == 14:
+        gfourteen.append(graphs_generated)
+
+    if pcost == 16:
+        gsixteen.append(graphs_generated)
+
+    if pcost == 18:
+        geighteen.append(graphs_generated)
+
+    if pcost == 20:
+        gtwenty.append(graphs_generated)
+
+    if pcost == 22:
+        gtwentytwo.append(graphs_generated)
+
+    if pcost == 24:
+        gtwentyfour.append(graphs_generated)
 
 #     print(graphs_generated,"nodes generated")
 
@@ -280,6 +306,12 @@ sumgsix = 0
 sumgeight = 0
 sumgten = 0
 sumgtwelve = 0
+sumgfourteen=0
+sumgsixteen=0
+sumgeighteen=0
+sumgtwenty=0
+sumgtwentytwo=0
+sumgtwentyfour=0
 
 for x in gtwo:
     sumgtwo += x
@@ -299,17 +331,47 @@ for x in gten:
 for x in gtwelve:
     sumgtwelve += x
 
+for x in gfourteen:
+    sumgfourteen += x
 
+for x in gsixteen:
+    sumgsixteen += x
+
+for x in geighteen:
+    sumgeighteen += x
+
+for x in gtwenty:
+    sumgtwenty += x
+
+for x in gtwentytwo:
+    sumgtwentytwo += x
+
+for x in gtwentyfour:
+    sumgtwentyfour += x
+
+if len(gtwo) !=0:
+    print(gtwo, "this is gtwo and average: ", sumgtwo/len(gtwo) , "and length is: ", len(gtwo))
+if len(gfour) !=0:
+    print(gfour, "this is gfour and average: ", sumgfour/len(gfour) , "and length is: ", len(gfour))
+if len(gsix) !=0:
+    print(gsix, "this is gsix and average: ", sumgsix/len(gsix) , "and length is: ", len(gsix))
 if len(geight) !=0:
-    print(geight, "this is gtwelve and average: ", sumgeight/len(geight) , "and length is: ", len(geight))
+    print(geight, "this is geight and average: ", sumgeight/len(geight) , "and length is: ", len(geight))
 if len(gten) !=0:
-    print(gten, "this is gten and average: ", sumgeight/len(gten), "and length is: ", len(gten))
+    print(gten, "this is gten and average: ", sumgten/len(gten), "and length is: ", len(gten))
 if len(gtwelve) !=0:
     print(gtwelve, "this is gtwelve and average: ", sumgtwelve/len(gtwelve) , "and length is: ", len(gtwelve))
 
-if len(gtwo) !=0:
-    print(gtwo, "this is gtwenty and average: ", sumgtwo/len(gtwo), "and length is: ", len(gtwo))
-if len(gfour) !=0:
-    print(gfour, "this is gtwentytwo and average: ", sumgfour/len(gfour) , "and length is: ", len(gfour))
-if len(gsix) !=0:
-    print(gsix, "this is gtwentyfour and average: ", sumgsix/len(gsix) , "and length is: ", len(gsix))
+if len(gfourteen) !=0:
+    print(gfourteen, "this is gfourteen and average: ", sumgfourteen/len(gfourteen) , "and length is: ", len(gfourteen))
+if len(gsixteen) !=0:
+    print(gsixteen, "this is gsixteen and average: ", sumgsixteen/len(gsixteen) , "and length is: ", len(gsixteen))
+if len(geighteen) !=0:
+    print(geighteen, "this is geighteen and average: ", sumgeighteen/len(geighteen) , "and length is: ", len(geighteen))
+if len(gtwenty) !=0:
+    print(gtwenty, "this is gtwenty and average: ", sumgtwenty/len(gtwenty) , "and length is: ", len(gtwenty))
+if len(gtwentytwo) !=0:
+    print(gtwentytwo, "this is gtwentytwo and average: ", sumgtwentytwo/len(gtwentytwo), "and length is: ", len(gtwentytwo))
+if len(gtwentyfour) !=0:
+    print(gtwentyfour, "this is gtwentyfour and average: ", sumgtwentyfour/len(gtwentyfour) , "and length is: ", len(gtwentyfour))
+
