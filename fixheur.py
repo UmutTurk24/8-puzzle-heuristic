@@ -196,15 +196,15 @@ gtwenty=[]
 gtwentytwo=[]
 gtwentyfour=[]
 
-for x in range(1000):
+for x in range(200):
     queue_manh = []
     pcost = 0
     nodes_searched = 0
     graphs_generated = 0
     myPuzzle.board =[-1,1,2,3,4,5,6,7,8]
-    myPuzzle.random_moves(20)
+    myPuzzle.random_moves(35)
     ind_zero = myPuzzle.board.index(-1)
-    man_heur = myPuzzle.calculate_misplaced_heuristic()
+    man_heur = myPuzzle.calculate_manhattan_heuristic()
     heapq.heappush(queue_manh,tuple((man_heur, myPuzzle.board,0)))
     searched_graphs = []
     length_queue = 0
@@ -215,6 +215,10 @@ for x in range(1000):
 #             print(nodes_searched, "solution length")
 #             print(nodes_searched)
             break
+
+        for x in searched_graphs:
+            if x == pop_val[1]:
+                continue
 
         searched_graphs.append(pop_val[1])
         myPuzzleUp.board = pop_val[1].copy()
@@ -229,25 +233,25 @@ for x in range(1000):
         if(myPuzzleDown.move_down(ind_zero)):
             graphs_generated += 1
             # print(myPuzzleDown.board,"puzzle_down")
-            manhattan_heur1 = myPuzzleDown.calculate_misplaced_heuristic()
+            manhattan_heur1 = myPuzzleDown.calculate_manhattan_heuristic()
             heapq.heappush(queue_manh, tuple((manhattan_heur1+pcost, myPuzzleDown.board, pcost+1)))
 
         if(myPuzzleUp.move_up(ind_zero)):
             graphs_generated += 1
             # print(myPuzzleUp.board,"puzzle_up")
-            manhattan_heur2 = myPuzzleUp.calculate_misplaced_heuristic()
+            manhattan_heur2 = myPuzzleUp.calculate_manhattan_heuristic()
             heapq.heappush(queue_manh, tuple((manhattan_heur2+pcost, myPuzzleUp.board, pcost+1)))
 
         if(myPuzzleRight.move_right(ind_zero)):
             graphs_generated += 1
             # print(myPuzzleRight.board,"puzzle_right")
-            manhattan_heur3 = myPuzzleRight.calculate_misplaced_heuristic()
+            manhattan_heur3 = myPuzzleRight.calculate_manhattan_heuristic()
             heapq.heappush(queue_manh, tuple((manhattan_heur3+pcost, myPuzzleRight.board, pcost+1)))
 
         if(myPuzzleLeft.move_left(ind_zero)):
             graphs_generated += 1
             # print(myPuzzleLeft.board,"puzzle_left")
-            manhattan_heur4 = myPuzzleLeft.calculate_misplaced_heuristic()
+            manhattan_heur4 = myPuzzleLeft.calculate_manhattan_heuristic()
             heapq.heappush(queue_manh, tuple((manhattan_heur4+pcost, myPuzzleLeft.board, pcost+1)))
     length_queue = len(queue_manh)
     print(pcost,"solution length")
