@@ -196,38 +196,43 @@ gtwenty=[]
 gtwentytwo=[]
 gtwentyfour=[]
 
-for x in range(200):
+for xloop in range(5000):
     queue_manh = []
     pcost = 0
     nodes_searched = 0
     graphs_generated = 0
     myPuzzle.board =[-1,1,2,3,4,5,6,7,8]
-    myPuzzle.random_moves(35)
+    myPuzzle.random_moves(30)
     ind_zero = myPuzzle.board.index(-1)
     man_heur = myPuzzle.calculate_manhattan_heuristic()
     heapq.heappush(queue_manh,tuple((man_heur, myPuzzle.board,0)))
     searched_graphs = []
+    searched_nodes = []
     length_queue = 0
     while len(queue_manh):
         heapq.heapify(queue_manh)
         pop_val = heapq.heappop(queue_manh)
+
         if pop_val[1] == [-1,1,2,3,4,5,6,7,8]:
 #             print(nodes_searched, "solution length")
 #             print(nodes_searched)
             break
 
-        for x in searched_graphs:
-            if x == pop_val[1]:
-                continue
-
-        searched_graphs.append(pop_val[1])
+        if pop_val in searched_nodes:
+            continue
+        # print("searched graphs: ", searched_graphs)
+        # for x in searched_graphs:
+        #     if x == pop_val[1]:
+        #         continue
+        searched_nodes.append(pop_val)
+        # searched_graphs.append(pop_val[1])
         myPuzzleUp.board = pop_val[1].copy()
         myPuzzleDown.board = pop_val[1].copy()
         myPuzzleRight.board = pop_val[1].copy()
         myPuzzleLeft.board = pop_val[1].copy()
 
         ind_zero = myPuzzleUp.board.index(-1)
-        # print(pop_val, ",manh heur")
+        print(pop_val, ",manh heur and graph num: ",xloop)
         nodes_searched += 1
         pcost = pop_val[2]
         if(myPuzzleDown.move_down(ind_zero)):
@@ -254,8 +259,8 @@ for x in range(200):
             manhattan_heur4 = myPuzzleLeft.calculate_manhattan_heuristic()
             heapq.heappush(queue_manh, tuple((manhattan_heur4+pcost, myPuzzleLeft.board, pcost+1)))
     length_queue = len(queue_manh)
-    print(pcost,"solution length")
-    print(nodes_searched, "nodes searched")
+    # print(pcost,"solution length")
+    # print(nodes_searched, "nodes searched")
 
     if pcost == 2:
         gtwo.append(graphs_generated)
