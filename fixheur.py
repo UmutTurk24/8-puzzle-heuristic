@@ -196,13 +196,13 @@ gtwenty=[]
 gtwentytwo=[]
 gtwentyfour=[]
 
-for xloop in range(500):
+for xloop in range(100):
     queue_manh = []
     pcost = 0
     nodes_searched = 0
     graphs_generated = 0
     myPuzzle.board =[-1,1,2,3,4,5,6,7,8]
-    myPuzzle.random_moves(50)
+    myPuzzle.random_moves(120)
     ind_zero = myPuzzle.board.index(-1)
     man_heur = myPuzzle.calculate_misplaced_heuristic()
     heapq.heappush(queue_manh,tuple((man_heur, myPuzzle.board,0)))
@@ -259,7 +259,7 @@ for xloop in range(500):
             manhattan_heur4 = myPuzzleLeft.calculate_misplaced_heuristic()
             heapq.heappush(queue_manh, tuple((manhattan_heur4+pcost, myPuzzleLeft.board, pcost+1)))
     length_queue = len(queue_manh)
-    # print(pcost,"solution length")
+    print(pcost,"solution length")
     # print(nodes_searched, "nodes searched")
 
     if pcost == 2:
